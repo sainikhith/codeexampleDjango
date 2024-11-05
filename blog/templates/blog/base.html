@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Skills BootCamp</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext">
+    </head>
+    <body>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                {% block navbar %}
+                    <li class="breadcrumb-item active" aria-current="page">Current Page</li>
+                {% endblock %}
+            </ol>
+        </nav>
+        <header class="page-header">
+            <div class="container">
+                <h1><a href="/">Skills BootCamp Tech Blog</a></h1>
+            </div>
+        </header>
+        <main class="container d-flex">
+            <aside class="sidebar">
+                <h2>Hot Topics</h2>
+                <ul>
+                    <li class="category-link"><a href="#">Category 1</a></li>
+                    <li class="category-link"><a href="#">Category 2</a></li>
+                </ul>
+                <h2>Quick Links</h2>
+                <ul>
+                    <li class="category-link"><a href="#">Admin</a></li>
+                    <li class="category-link"><a href="#">New Post</a></li>
+                </ul>
+            </aside>
+            <section class="content flex-grow-1">
+                {% block content %}
+                {% endblock %}
+            </section>
+        </main>
+        
+    </body>
+    
+</html>

@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+
+{% block navbar %}
+    <li class="breadcrumb-item"><a href="{% url 'post_list' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Current Page</li>
+{% endblock %}
+
+{% block content %}
+{% for post in posts %}
+    <article class="post">
+        <h2><a href="{% url 'post_detail' id=post.pk %}">{{ post.title }}</a></h2>
+        <p><a href="{% url 'post_detail' id=post.pk %}">click to know more</a></p>
+    </article>
+{% endfor %}
+{% endblock %}

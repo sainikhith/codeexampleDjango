@@ -1,0 +1,17 @@
+# python
+*.pyc
+__pycache__
+# my venv
+fp
+.env
+
+# macOS
+._*
+.DS_Store
+.fseventsd
+.Spotlight-V100
+
+# Visual Studio
+.vscode/
+.history/
+*.code-workspace
