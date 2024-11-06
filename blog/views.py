@@ -1,16 +1,17 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.utils import timezone
-from blog.models import Post
+from .models import Post
 
 # Create your views here.
 def post_list(request):
     posts = Post.objects.all()
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    return HttpResponse(f"List of Posts (You are in main blog page): {posts}")  
+    # return render(request, 'blog/post_list.html', {'posts': posts})
 
-def post_detail(request, id):
-    post = get_object_or_404(Post, pk=id)
-    return render(request, 'blog/post_detail.html', {'post': post})
+# def post_detail(request, id):
+#     post = get_object_or_404(Post, pk=id)
+#     return render(request, 'blog/post_detail.html', {'post': post})
 
 # def post_list(request):
 #     posts = Post.objects.all()  # Retrieve all posts from the database

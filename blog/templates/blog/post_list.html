@@ -8,8 +8,12 @@
 {% block content %}
 {% for post in posts %}
     <article class="post">
-        <h2><a href="{% url 'post_detail' id=post.pk %}">{{ post.title }}</a></h2>
-        <p><a href="{% url 'post_detail' id=post.pk %}">click to know more</a></p>
+        <h2><a href="#">{{ post.title }}</a></h2>
+        <p><a href="#">click to know more</a></p>
+        
     </article>
 {% endfor %}
 {% endblock %}
+
+<!-- <h2><a href="{% url 'post_detail' id=post.pk %}">{{ post.title }}</a></h2>
+        <p><a href="{% url 'post_detail' id=post.pk %}">click to know more</a></p> -->
