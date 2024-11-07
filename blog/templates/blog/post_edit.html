@@ -1,0 +1,70 @@
+{% extends 'blog/base.html' %}
+
+{% block navbar %}
+
+    <li class="breadcrumb-item"><a href="{% url 'post_list' %}">Home</a></li>
+    {% if post.pk %}
+        <li class="breadcrumb-item active" aria-current="page">{{ post.title }} Page</li>
+    {% else %}
+        <li class="breadcrumb-item active" aria-current="page">New Post</li>
+    {% endif %}
+
+{% endblock %}
+
+{% block loginlinks %}
+{% endblock %}
+{% block newpost %}
+{% endblock %}
+
+{% block content %}
+
+    <h2>{% if post.pk %}Edit Post: {{ post.title }}{% else %}Create New Post{% endif %}</h2>
+    <br>
+    <br>
+    <form method="POST">
+        
+        {% csrf_token %}
+        <!-- {{ form.as_p }} -->
+        <!-- <button type="submit" class="save btn btn-primary">{% if post.pk %}Save Changes{% else %}Save{% endif %}</button> -->
+        
+        <!-- Title field -->
+    <div class="mb-3 row">
+        <label for="{{ form.title.id_for_label }}" class="col-sm-2 col-form-label">Blog Post Title:</label>
+        <div class="col-sm-10">
+            {{ form.title }}
+        </div>
+    </div>
+    
+    <!-- Text area field -->
+    <div class="mb-3 row">
+        <label for="{{ form.text.id_for_label }}" class="col-sm-2 col-form-label">Blog Post Description:</label>
+        <div class="col-sm-10">
+            {{ form.text }}
+        </div>
+    </div>
+    
+    <button type="submit" class="save btn btn-primary">{% if post.pk %}Save Changes{% else %}Save{% endif %}</button>
+    
+    
+    
+    </form>
+
+    {% if post.pk %}
+        <!-- If the post has been saved and has an ID, provide a link to its detail page -->
+        <a href="{% url 'post_detail' id=post.pk %}" class="btn btn-danger">Cancel</a>
+        {% else %}
+        <!-- If it's a new post (no ID yet), redirect to the post list page -->
+        <a href="{% url 'post_list' %}" class="btn btn-danger">Cancel</a>
+    {% endif %}
+    <!-- Display success or error messages -->
+    {% if messages %}
+        <script>
+            window.onload = function() {
+                var message = "{{ messages.0 }}";  
+                if (message) {
+                    alert(message);  
+                }
+            }
+        </script>
+    {% endif %}
+{% endblock %}

@@ -1,7 +1,11 @@
-<!-- {% extends 'blog/base.html' %}
+{% extends 'blog/base.html' %}
 {% block navbar %}
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'post_list' %}">Home</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{post.title}} Page</li>
+{% endblock %}
+{% block loginlinks %}
+{% endblock %}
+{% block newpost %}
 {% endblock %}
 {% block content %}
     <article class="post">
@@ -10,8 +14,15 @@
                 Published on : {{ post.published_date }}
             </time>
         {% endif %}
-        <h2>{{ post.title }}</h2>
+        <h2 class="post-title" data-bs-toggle="tooltip" title="Do you want to edit?">
+        <a href="{% url 'post_edit' id=post.pk %}">
+            {{ post.title }}
+        </a>
+        </h2>
         <h3>Artice by {{ post.author }}</h3>
         <p>{{ post.text|linebreaksbr }}</p>
+        <a href="{% url 'post_list' %}">
+            <li class="category-link" data-bs-toggle="tooltip" title="Click here to go back to main list">Go Back</li>
+        </a>
     </article>
-{% endblock %} -->
+{% endblock %}

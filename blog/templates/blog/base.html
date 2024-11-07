@@ -22,23 +22,28 @@
         </header>
         <main class="container d-flex">
             <aside class="sidebar">
-                <h2>Hot Topics</h2>
-                <ul>
-                    <li class="category-link"><a href="#">Category 1</a></li>
-                    <li class="category-link"><a href="#">Category 2</a></li>
-                </ul>
                 <h2>Quick Links</h2>
                 <ul>
-                    <li class="category-link"><a href="#">Admin</a></li>
-                    <li class="category-link"><a href="#">New Post</a></li>
+                    {% block loginlinks %}
+                    <li class="category-link"><a href="#">Login</a></li>
+                    <li class="category-link"><a href="#">Logout</a></li>
+                    {% endblock %}
+                    <li class="category-link"><a href="{% url 'admin:index' %}">Admin</a></li>
                 </ul>
+                {% block newpost %}
+                <h2>Add New Post</h2>
+                <ul>
+                    <li class="category-link"><a href="{% url 'post_new' %}">Tap Me</a></li>
+                </ul>
+                {% endblock %}
+                
             </aside>
             <section class="content flex-grow-1">
                 {% block content %}
                 {% endblock %}
             </section>
         </main>
-        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>   
     </body>
     
 </html>

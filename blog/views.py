@@ -1,17 +1,22 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.utils import timezone
-from .models import Post
+from django.contrib.auth.models import User
+from django.contrib import messages
+
+from blog.forms import PostForm
+from blog.models import Post
 
 # Create your views here.
 def post_list(request):
     posts = Post.objects.all()
-    return HttpResponse(f"List of Posts (You are in main blog page): {posts}")  
-    # return render(request, 'blog/post_list.html', {'posts': posts})
+    # return HttpResponse(f"List of Posts (You are in main blog page): {posts}")  
+    return render(request, 'blog/post_list.html', {'posts': posts})
 
-# def post_detail(request, id):
-#     post = get_object_or_404(Post, pk=id)
-#     return render(request, 'blog/post_detail.html', {'post': post})
+
+def post_detail(request, id):
+    post = get_object_or_404(Post, pk=id)
+    return render(request, 'blog/post_detail.html', {'post': post})
 
 # def post_list(request):
 #     posts = Post.objects.all()  # Retrieve all posts from the database
@@ -31,3 +36,35 @@ def post_list(request):
 #         post.delete()  # Delete the post from the database
 #         return redirect('post_list')  # Redirect to the list of posts after deletion
 #     return HttpResponse(f"Post Delete: {post}")
+
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = User.objects.get(username='sai')
+            post.published_date = timezone.now()
+            post.save()
+
+            # messages.success(request, "Post successfully created!")
+            return redirect('post_list')
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_edit.html', {'form': form})
+
+def post_edit(request, id):
+    post = get_object_or_404(Post, pk=id)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = User.objects.get(username='sai')
+            post.published_date = timezone.now()
+            post.save()
+
+            # messages.success(request, "Post successfully edited!")
+            return redirect('post_detail', id=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/post_edit.html', {'form': form, 'post':post})

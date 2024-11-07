@@ -2,18 +2,36 @@
 
 {% block navbar %}
     <li class="breadcrumb-item"><a href="{% url 'post_list' %}">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Current Page</li>
+    <li class="breadcrumb-item active" aria-current="page">All Posts</li>
 {% endblock %}
+
+
 
 {% block content %}
-{% for post in posts %}
+<!-- {% for post in posts %}
     <article class="post">
-        <h2><a href="#">{{ post.title }}</a></h2>
-        <p><a href="#">click to know more</a></p>
-        
+        <h2 data-bs-toggle="tooltip" title="click to know more"><a href="{% url 'post_detail' id=post.pk %}">{{ post.title }}</a></h2>
     </article>
-{% endfor %}
-{% endblock %}
+{% endfor %} -->
+<div class="container">
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-md-4 mb-4"> 
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" data-bs-toggle="tooltip" title="Click to know more">
+                            <a href="{% url 'post_detail' id=post.pk %}" class="text-decoration-none">{{ post.title }}</a>
+                        </h5>
+                        <!-- <a href="{% url 'post_edit' id=post.pk %}" class="btn btn-primary">Edit</a> -->
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
+{% endblock %}
+<!-- <h2><a href="#">{{ post.title }}</a></h2>
+<p><a href="#">click to know more</a></p> -->
 <!-- <h2><a href="{% url 'post_detail' id=post.pk %}">{{ post.title }}</a></h2>
         <p><a href="{% url 'post_detail' id=post.pk %}">click to know more</a></p> -->
