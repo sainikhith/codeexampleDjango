@@ -18,8 +18,24 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+
+# Define the schema view
+schema_view = get_schema_view(
+   openapi.Info(
+      title="All Api's",
+      default_version='v1'
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('blog/', include('blog.urls')),
-    path('', include('api.urls'))
+    path('blogapi/', include('blogapi.urls')),
+    path('', schema_view.with_ui('swagger'), name='swagger-ui')
 ]
