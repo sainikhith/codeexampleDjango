@@ -28,3 +28,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+
+class EmailOtpLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField()

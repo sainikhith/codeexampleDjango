@@ -2,3 +2,7 @@ Django
 djangorestframework
 drf-yasg
 djangorestframework-api-key
+pyotp
+django-otp
+email-validator
+django-environ
