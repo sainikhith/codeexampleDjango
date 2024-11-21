@@ -1,13 +1,25 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from blog.models import Post
 from .serializers import PostSerializer
+
+from django.contrib.auth import login
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 
 @api_view(['GET'])
 def getAllPosts(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)
+    return Response({
+        "status": True,
+        "data": serializer.data
+        })
 
 @api_view(['GET'])
 def getPostById(request, id):
@@ -19,12 +31,14 @@ def getPostById(request, id):
     serializer = PostSerializer(post)
     return Response(serializer.data)
 
+@swagger_auto_schema(method='post',request_body=PostSerializer)
 @api_view(['POST'])
 def addPosts(request):
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-    return Response(serializer.data)
+        return Response(serializer.data, status=201)  # Return 201 Created status
+    return Response(serializer.errors, status=400)
 
 @api_view(['PUT'])
 def updatePost(request, id):

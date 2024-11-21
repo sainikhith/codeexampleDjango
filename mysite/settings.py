@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'drf_yasg',
     'rest_framework',
-    'drf_yasg'
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +70,12 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 

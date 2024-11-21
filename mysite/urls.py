@@ -34,8 +34,9 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
-    path('blog/', include('blog.urls')),
-    path('blogapi/', include('blogapi.urls')),
+    path('admin/', admin.site.urls, name='admin-ui'),
+    path('blogapp/', include('blog.urls'), name='blog-ui'),
+    path('blog/', include('blogapi.urls')),
+    path('login/', include('loginapi.urls')),
     path('', schema_view.with_ui('swagger'), name='swagger-ui')
 ]
