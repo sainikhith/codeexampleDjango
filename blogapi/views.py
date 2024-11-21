@@ -9,7 +9,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def getAllPosts(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
@@ -30,7 +30,7 @@ def getPostById(request, id):
 
 @swagger_auto_schema(method='post',request_body=PostSerializer)
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def addPosts(request):
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
