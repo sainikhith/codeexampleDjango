@@ -3,16 +3,13 @@ from rest_framework.decorators import api_view, permission_classes
 from blog.models import Post
 from .serializers import PostSerializer
 
-from django.contrib.auth import login
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getAllPosts(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
@@ -33,6 +30,7 @@ def getPostById(request, id):
 
 @swagger_auto_schema(method='post',request_body=PostSerializer)
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def addPosts(request):
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
