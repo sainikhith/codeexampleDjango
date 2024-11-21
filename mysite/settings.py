@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_api_key'
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,14 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization',
             'description': 'Use the token in the format: `token <your-token>`'
         },
+        'ApiKeyAuth': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization',
+            'description': 'Use the key in the format: `Api-Key <your-api-key>`',
+        }
     },
+    
     'USE_SESSION_AUTH': False,    # Disable session-based authentication
 }
 
@@ -87,6 +95,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    # to set api-key permissions globally for all endpoints
+    # "DEFAULT_PERMISSION_CLASSES": [
+    #     "rest_framework_api_key.permissions.HasAPIKey",
+    # ]
 }
 
 WSGI_APPLICATION = 'mysite.wsgi.application'

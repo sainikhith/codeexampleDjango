@@ -5,11 +5,14 @@ from .serializers import PostSerializer
 
 from rest_framework.permissions import IsAuthenticated
 
+from rest_framework_api_key.permissions import HasAPIKey
+
 from drf_yasg.utils import swagger_auto_schema
 
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
+# @permission_classes([HasAPIKey])
 def getAllPosts(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
