@@ -28,18 +28,22 @@ def loginpost(request):
     username = serializer.data['username']
     password = serializer.data['password']
 
-    # user = User.objects.filter(username=username).first()
+    user = User.objects.filter(username=username).first()
     # if user and user.check_password(password):
     #     return Response({
     #         "status": True,
     #         "data": {'token' : str(Token.objects.get_or_create(user=user)[0].key)}
     #     })
-
     user_obj = authenticate(username=username, password=password)
+    user_data = {
+        "id": user.id,
+        "name": f"{user.first_name} {user.last_name}".strip() if user.first_name or user.last_name else user.username,
+        "token": str(Token.objects.get_or_create(user=user_obj)[0].key),
+    }
     if user_obj:
         return Response({
             "status": True,
-            "data": {'token' : str(Token.objects.get_or_create(user=user_obj)[0].key)}
+            "data": user_data
         })
 
     return Response({
@@ -56,10 +60,15 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=data)
         if serializer.is_valid():
             user = serializer.save()
+            user_data = {
+                "id": user.id,
+                "username": user.username,
+                "email" : getattr(user, "email", "")
+            }
             return Response({
                 "status": True,
                 "message": "User Created Successfully",
-                "data" : serializer.data
+                "data" : user_data
             }, status= status.HTTP_201_CREATED)
         return Response({
             "status": False,
