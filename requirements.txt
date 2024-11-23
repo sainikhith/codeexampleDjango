@@ -6,3 +6,4 @@ pyotp
 django-otp
 email-validator
 django-environ
+django-cors-headers
