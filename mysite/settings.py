@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -77,7 +77,12 @@ TEMPLATES = [
         },
     },
 ]
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'TokenAuth': {
@@ -120,12 +125,19 @@ DATABASES = {
     }
 }
 
-# import environ
+# Initialize environment variables
+env = environ.Env()
+environ.Env.read_env()  # Reads the .env file
 
-# env = environ.Env()
-# environ.Env.read_env()
-# otp based authentication
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email configurations
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env.int('EMAIL_PORT')  # Convert to integer
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')  # Convert to boolean
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

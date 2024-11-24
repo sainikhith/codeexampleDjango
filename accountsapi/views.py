@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 
 from django.contrib.auth.models import User
+from django.core.cache import cache
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -90,7 +91,6 @@ class ProfileView(APIView):
 
 # OTP-based Auth
 # Step 1: Generate OTP for the given email
-# @swagger_auto_schema(method='post', request_body=openapi.Schema(type='object', properties={'email': openapi.Schema(type='string', format='email')}, required=['email']))
 @api_view(['PUT'])
 def generate_otp_for_email(request, email):
     # email = request.data.get("email")
@@ -108,13 +108,27 @@ def generate_otp_for_email(request, email):
             "status": False,
             "message": "User not found"
         }, status=404)
+    except Exception as e:
+        return Response({
+            "status": False,
+            "message": "An error occurred while retrieving the user."
+        }, status=500)
 
     # Generate OTP and send it to the email
-    otp = generate_otp(email)
+    try:
+        # Generate OTP and send it to the email
+        otp = generate_otp(email)
+        # Store OTP in cache with a 5-minute expiration
+        cache.set(f"otp_{email}", otp, timeout=300)
+    except Exception as e:
+        return Response({
+            "status": False,
+            "message": "Failed to generate or send OTP. Please try again later."
+        }, status=500)
     
     return Response({
         "status": True,
-        "message": f"The otp for user is user {user.username} is {otp}"
+        "message": f"The otp for user {user.username} has been sent to mail"
     }, status=200)
 
 
@@ -139,11 +153,17 @@ def verify_otp_login(request):
             "message": "User not found"
         }, status=404)
 
-    # Validate the OTP here
-    totp = pyotp.TOTP('base32secret3232')  # Should be same secret used for generating OTP
-    if totp.verify(otp_provided):  # Check if the provided OTP matches
+    # Retrieve the OTP from the cache
+    cached_otp = cache.get(f"otp_{email}")
+    print(cached_otp)
+    if cached_otp is None:
+        return Response({"status": False, "message": "OTP has expired or does not exist"}, status=400)
+
+    if cached_otp == otp_provided:  # Check if the provided OTP matches
         # Successful login, return token
         token = str(Token.objects.get_or_create(user=user)[0].key)
+        # Delete OTP from cache after successful verification
+        cache.delete(f"otp_{email}")
         return Response({
             "status": True,
             "message": "Login successful",
